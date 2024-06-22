@@ -1,11 +1,10 @@
-import { User } from './../models/user';
+import { User } from '../models/User';
 import {knexConnection} from './../db/db';
-import { log } from 'console';
 
 export class UserRepository{ 
 
-    async create(name:string, age:number,description:string) {
-        return await knexConnection<User>('users').insert({name,age,description}).then((id)=>{
+    async create(user:User) {
+        return knexConnection<User>('users').insert(user).then((id)=>{
             return knexConnection<User>('users').select().where('id',id[0]).then((resp)=>resp[0]);
         });
     }

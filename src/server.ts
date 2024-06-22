@@ -1,6 +1,6 @@
 import fast from 'fastify';
 import { UserRepository } from './repository/UserRepository';
-import { User } from './models/user';
+import { User } from './models/User';
 import { env } from './config/env';
 
 const app = fast();
@@ -9,8 +9,7 @@ const userRepository = new UserRepository();
 app.listen({ port: env.PORT }).then(() => console.log('HTTP Server running on port: '+env.PORT));
 
 app.post("/users", (req, res) => {
-    const { name, age, description } = req.body as User;
-    return userRepository.create(name, age, description);
+    return userRepository.create(req.body as User);
 })
 
 app.get('/users', () => userRepository.findAll());
