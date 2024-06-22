@@ -1,16 +1,17 @@
 import { User } from './../models/user';
 import {knexConnection} from './../db/db';
+import { log } from 'console';
 
 export class UserRepository{ 
 
-    async create(name:string, age:number) {
-        return await knexConnection<User>('users').insert({name,age}).then((id)=>{
-            return knexConnection.select().from('users').where('id',id[0]).then((resp)=>resp[0]);
+    async create(name:string, age:number,description:string) {
+        return await knexConnection<User>('users').insert({name,age,description}).then((id)=>{
+            return knexConnection<User>('users').select().where('id',id[0]).then((resp)=>resp[0]);
         });
     }
 
     findAll(){
-        return knexConnection<User[]>('users').select().limit(10).returning('*');
+        return knexConnection<User>('users').select().limit(10).returning('*');
     }
     
     async findById(id:number){
