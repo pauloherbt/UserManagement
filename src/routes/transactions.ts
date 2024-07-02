@@ -25,16 +25,15 @@ export async function transactionsRoutes(app: FastifyInstance) {
         return res.status(201).send(await transacRepository.create({ ...result, sessionId }));
     });
 
-    app.get('/',{preHandler:verifyCookieExistence}, async (req, res) => {
+    app.get('/', { preHandler: verifyCookieExistence }, async (req, res) => {
         const sessionId = req.cookies.sessionId || "";
         return transacRepository.findAll(sessionId);
     });
 
-    app.get('/:id',{preHandler:verifyCookieExistence} ,async (req,res)=>{
-        const sessionId = req.cookies.sessionId || "";
-        const idSchema = z.object({id:z.string().uuid()})
-        const {id} = idSchema.parse(req.params);
-        return transacRepository.findById(id,sessionId);
+    app.get('/:id', { preHandler: verifyCookieExistence }, async (req, res) => {
+        const sessionId = req.cookies.sessionId as string;
+        const transacId = z.object({ id: z.string().uuid() }).parse(req.params).id;
+        return transacRepository.findById(transacId, sessionId);
     })
 
 }

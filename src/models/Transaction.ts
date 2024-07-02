@@ -1,5 +1,6 @@
 export interface Transaction{
     title:string,
     amount:number,
-    type:string
+    type:string,
+    sessionId?:string
 }
