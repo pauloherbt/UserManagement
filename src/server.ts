@@ -3,7 +3,7 @@ import { env } from './config/env';
 import { userRoutes } from './routes/user';
 import { transactionsRoutes } from './routes/transactions';
 import cookie from '@fastify/cookie'
-const app = fast();
+export const app = fast();
 
 app.listen({ port: env.PORT }).then(() => console.log('HTTP Server running on port: '+env.PORT));
 app.register(cookie);
