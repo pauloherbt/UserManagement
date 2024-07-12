@@ -1,5 +1,6 @@
 import {Knex,knex} from "knex";
 import { env } from "../config/env";
+
 export const config:Knex.Config = {
     client: 'sqlite3',
     connection:{

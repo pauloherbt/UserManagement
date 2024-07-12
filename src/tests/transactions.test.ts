@@ -1,28 +1,35 @@
 import request from 'supertest'
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest"
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest"
 import { app } from '../server'
 import { Transaction } from '../models/Transaction';
 import { execSync } from "child_process"
+import { afterEach } from 'node:test';
 
+beforeAll(async ()=>{
+    await app.ready();
+})
+afterAll(async ()=>{
+    await app.close();
+})
+
+beforeEach(()=>{
+    execSync("npx knex migrate:latest");
+})
+afterEach(()=>{
+    execSync("rm .\src\db\test.sqlite");
+})
 describe('unit test transactions routes', () => {
     
-    beforeEach(()=>{
-        execSync("npx knex migrate:latest")
-    })
-    afterEach(()=>{
-        execSync('npx knex migrate:rollback --all')
-    })
     
     const url = '/transactions';
 
-    it.skip('should create a Transaction returning 201', async () => {
-        const transaction: Transaction = { title: "teste", amount: 100, type: 'credit' }
+    it('should create a Transaction returning 201', async () => {
+            const transaction: Transaction = { title: "teste", amount: 100, type: 'credit' }
         const res = await request(app.server)
-            .post(url).send(transaction).accept('application/json');
-        
+            .post(url).send(transaction);
         expect(res.status).toEqual(201);
         expect(res.body).contain(transaction)
-    });
+    })
 
     it('should return all transactions by user',async()=>{
         const transaction: Transaction = { title: "teste", amount: 100, type: 'credit' }
